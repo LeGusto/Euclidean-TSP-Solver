@@ -1,0 +1,9 @@
+<div class="centered-rectangle">
+  <div class="click-area" (click)="onClick($event)">
+    <p>Click anywhere inside this area</p>
+    <div *ngIf="lastClickPosition" class="coordinates">
+      Last click position: X = {{ lastClickPosition.x }}, Y =
+      {{ lastClickPosition.y }}
+    </div>
+  </div>
+</div>
