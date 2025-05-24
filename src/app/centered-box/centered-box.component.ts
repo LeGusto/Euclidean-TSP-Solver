@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,11 +10,20 @@ import { CommonModule } from '@angular/common';
 export class CenteredBoxComponent {
   lastClickPosition = { x: 0, y: 0 };
 
+  vertices: { x: number; y: number }[] = [];
+  edges = new Map();
+
   onClick(event: MouseEvent) {
     this.lastClickPosition = {
       x: event.clientX,
       y: event.clientY,
     };
-    console.log('Clicked at:', this.lastClickPosition);
+
+    this.vertices.push(this.lastClickPosition);
+  }
+
+  removeVertex(index: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.vertices.splice(index, 1);
   }
 }

@@ -36,3 +36,12 @@
   background-color: #f0f0f0;
   border-radius: 4px;
 }
+
+.circle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red;
+  transform: translate(-50%, -50%);
+}

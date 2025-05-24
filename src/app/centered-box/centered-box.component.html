@@ -7,3 +7,10 @@
     </div>
   </div>
 </div>
+
+<div
+  *ngFor="let vertex of vertices; let i = index"
+  class="circle"
+  [ngStyle]="{ left: vertex.x + 'px', top: vertex.y + 'px' }"
+  (click)="removeVertex(i, $event)"
+></div>
