@@ -5,6 +5,7 @@
   border: 2px solid #333;
   border-radius: 8px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 20px;
@@ -44,4 +45,12 @@
   border-radius: 50%;
   background-color: red;
   transform: translate(-50%, -50%);
+}
+
+.calculate {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
 }

@@ -1,140 +1,133 @@
-type DistanceMatrix = number[][];
-type MemoizationTable = { [key: string]: number };
+type Edge = { to: number; cost: number };
+type AdjacencyList = Edge[][];
+type MemoKey = `${number},${number}`; // Bitmask, CurrentCity
 
 class TSPSolver {
-  private distanceMatrix: DistanceMatrix;
-  private numCities: number;
-  private memo: MemoizationTable;
-  private parent: { [key: string]: number };
+  private adj: AdjacencyList;
+  private n: number;
+  private memo: Map<MemoKey, { cost: number; prevCity?: number }>;
+  private fullMask: number;
 
-  constructor(distanceMatrix: DistanceMatrix) {
-    this.distanceMatrix = distanceMatrix;
-    this.numCities = distanceMatrix.length;
-    this.memo = {};
-    this.parent = {};
+  constructor(adjacencyList: AdjacencyList) {
+    this.adj = adjacencyList;
+    this.n = adjacencyList.length;
+    this.memo = new Map();
+    this.fullMask = (1 << this.n) - 1;
   }
 
   public solve(): { path: number[]; cost: number } {
-    if (this.numCities === 0) {
-      return { path: [], cost: 0 };
+    if (this.n === 0) return { path: [], cost: 0 };
+
+    // Initialize DP for single-city subsets
+    for (let i = 0; i < this.n; i++) {
+      const key: MemoKey = `${1 << i},${i}`;
+      this.memo.set(key, { cost: 0 });
     }
 
-    // Initialize memoization for subsets with just the starting city (0)
-    for (let k = 1; k < this.numCities; k++) {
-      const key = this.createKey(1 << k, k);
-      this.memo[key] = this.distanceMatrix[0][k];
-    }
-
-    // Solve for all subsets
-    for (let subsetSize = 2; subsetSize < this.numCities; subsetSize++) {
+    // Solve for all subset sizes from 2 to n
+    for (let subsetSize = 2; subsetSize <= this.n; subsetSize++) {
       const subsets = this.generateSubsets(subsetSize);
-      for (const subset of subsets) {
-        for (let k = 1; k < this.numCities; k++) {
-          if (!this.isInSubset(k, subset)) continue;
 
-          const prevSubset = subset ^ (1 << k);
-          let minDist = Infinity;
+      for (const mask of subsets) {
+        for (let currentCity = 0; currentCity < this.n; currentCity++) {
+          if (!(mask & (1 << currentCity))) continue;
+
+          const prevMask = mask ^ (1 << currentCity);
+          let minCost = Infinity;
           let bestPrevCity = -1;
 
-          for (let m = 1; m < this.numCities; m++) {
-            if (m === k || !this.isInSubset(m, prevSubset)) continue;
+          // Check all possible previous cities
+          for (let prevCity = 0; prevCity < this.n; prevCity++) {
+            if (!(prevMask & (1 << prevCity))) continue;
 
-            const key = this.createKey(prevSubset, m);
-            const newDist = this.memo[key] + this.distanceMatrix[m][k];
+            // Find edge from prevCity to currentCity
+            const edge = this.adj[prevCity].find((e) => e.to === currentCity);
+            if (!edge) continue;
 
-            if (newDist < minDist) {
-              minDist = newDist;
-              bestPrevCity = m;
+            const prevKey: MemoKey = `${prevMask},${prevCity}`;
+            const prevData = this.memo.get(prevKey);
+            if (!prevData) continue;
+
+            const totalCost = prevData.cost + edge.cost;
+            if (totalCost < minCost) {
+              minCost = totalCost;
+              bestPrevCity = prevCity;
             }
           }
 
-          const key = this.createKey(subset, k);
-          this.memo[key] = minDist;
-          this.parent[key] = bestPrevCity;
+          if (minCost !== Infinity) {
+            const key: MemoKey = `${mask},${currentCity}`;
+            this.memo.set(key, { cost: minCost, prevCity: bestPrevCity });
+          }
         }
       }
     }
 
-    // Find the minimum cost to return to the starting city (0)
-    const fullSubset = (1 << this.numCities) - 2; // All cities except 0
+    // Find the minimum cost in full subset
     let minCost = Infinity;
     let lastCity = -1;
 
-    for (let k = 1; k < this.numCities; k++) {
-      const key = this.createKey(fullSubset, k);
-      const totalCost = this.memo[key] + this.distanceMatrix[k][0];
-
-      if (totalCost < minCost) {
-        minCost = totalCost;
-        lastCity = k;
+    for (let city = 0; city < this.n; city++) {
+      const key: MemoKey = `${this.fullMask},${city}`;
+      const data = this.memo.get(key);
+      if (data && data.cost < minCost) {
+        minCost = data.cost;
+        lastCity = city;
       }
     }
 
+    if (minCost === Infinity) {
+      throw new Error('No valid path visiting all cities');
+    }
+
     // Reconstruct the path
-    const path = this.reconstructPath(fullSubset, lastCity);
-    path.unshift(0); // Add starting city
-    path.push(0); // Return to starting city
-
+    const path = this.reconstructPath(this.fullMask, lastCity);
     return { path, cost: minCost };
-  }
-
-  private createKey(subset: number, city: number): string {
-    return `${subset},${city}`;
-  }
-
-  private isInSubset(city: number, subset: number): boolean {
-    return (subset & (1 << city)) !== 0;
   }
 
   private generateSubsets(size: number): number[] {
     const subsets: number[] = [];
-    this.generateSubsetsHelper(1, 0, size, subsets);
+    this.backtrackSubsets(0, 0, 0, size, subsets);
     return subsets;
   }
 
-  private generateSubsetsHelper(
-    currentCity: number,
-    currentSubset: number,
-    remaining: number,
+  private backtrackSubsets(
+    start: number,
+    currentMask: number,
+    currentSize: number,
+    targetSize: number,
     subsets: number[]
   ): void {
-    if (remaining === 0) {
-      subsets.push(currentSubset);
+    if (currentSize === targetSize) {
+      subsets.push(currentMask);
       return;
     }
 
-    if (currentCity >= this.numCities) {
-      return;
+    for (let city = start; city < this.n; city++) {
+      this.backtrackSubsets(
+        city + 1,
+        currentMask | (1 << city),
+        currentSize + 1,
+        targetSize,
+        subsets
+      );
     }
-
-    // Include current city
-    this.generateSubsetsHelper(
-      currentCity + 1,
-      currentSubset | (1 << currentCity),
-      remaining - 1,
-      subsets
-    );
-
-    // Exclude current city
-    this.generateSubsetsHelper(
-      currentCity + 1,
-      currentSubset,
-      remaining,
-      subsets
-    );
   }
 
-  private reconstructPath(subset: number, lastCity: number): number[] {
+  private reconstructPath(mask: number, lastCity: number): number[] {
     const path: number[] = [];
-    let currentSubset = subset;
+    let currentMask = mask;
     let currentCity = lastCity;
 
-    while (currentSubset !== 0) {
+    while (currentMask !== 0) {
       path.unshift(currentCity);
-      const key = this.createKey(currentSubset, currentCity);
-      const prevCity = this.parent[key];
-      currentSubset = currentSubset ^ (1 << currentCity);
-      currentCity = prevCity;
+      const key: MemoKey = `${currentMask},${currentCity}`;
+      const data = this.memo.get(key);
+
+      if (!data?.prevCity !== undefined) break;
+
+      currentMask ^= 1 << currentCity;
+      currentCity = data.prevCity;
     }
 
     return path;
@@ -142,14 +135,29 @@ class TSPSolver {
 }
 
 // Example usage:
-const distanceMatrix: number[][] = [
-  [0, 10, 15, 20],
-  [10, 0, 35, 25],
-  [15, 35, 0, 30],
-  [20, 25, 30, 0],
+const adjacencyList: AdjacencyList = [
+  [
+    { to: 1, cost: 10 },
+    { to: 2, cost: 15 },
+  ], // City 0
+  [
+    { to: 0, cost: 10 },
+    { to: 2, cost: 35 },
+    { to: 3, cost: 25 },
+  ], // City 1
+  [
+    { to: 0, cost: 15 },
+    { to: 1, cost: 35 },
+    { to: 3, cost: 30 },
+  ], // City 2
+  [
+    { to: 0, cost: 20 },
+    { to: 1, cost: 25 },
+    { to: 2, cost: 30 },
+  ], // City 3
 ];
 
-const solver = new TSPSolver(distanceMatrix);
+const solver = new TSPSolver(adjacencyList);
 const result = solver.solve();
 
 console.log('Optimal Path:', result.path);
