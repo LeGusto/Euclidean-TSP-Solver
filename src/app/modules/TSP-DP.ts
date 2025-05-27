@@ -119,6 +119,7 @@ class TSPSolver {
     let currentMask = mask;
     let currentCity = lastCity;
 
+    // Todo: rework basically everything
     while (currentMask !== 0) {
       path.unshift(currentCity);
       const key: MemoKey = `${currentMask},${currentCity}`;
