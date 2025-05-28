@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TSPSolverModule } from '../modules/TSP-DP';
 
 @Component({
   selector: 'app-centered-box',

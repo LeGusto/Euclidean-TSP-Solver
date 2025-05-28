@@ -2,7 +2,7 @@ type Edge = { to: number; cost: number };
 type AdjacencyList = Edge[][];
 type MemoKey = `${number},${number}`; // Bitmask, CurrentCity
 
-class TSPSolver {
+export class TSPSolverModule {
   private adj: AdjacencyList;
   private n: number;
   private memo: Map<MemoKey, { cost: number; prevCity?: number }>;
@@ -134,32 +134,3 @@ class TSPSolver {
     return path;
   }
 }
-
-// Example usage:
-const adjacencyList: AdjacencyList = [
-  [
-    { to: 1, cost: 10 },
-    { to: 2, cost: 15 },
-  ], // City 0
-  [
-    { to: 0, cost: 10 },
-    { to: 2, cost: 35 },
-    { to: 3, cost: 25 },
-  ], // City 1
-  [
-    { to: 0, cost: 15 },
-    { to: 1, cost: 35 },
-    { to: 3, cost: 30 },
-  ], // City 2
-  [
-    { to: 0, cost: 20 },
-    { to: 1, cost: 25 },
-    { to: 2, cost: 30 },
-  ], // City 3
-];
-
-const solver = new TSPSolver(adjacencyList);
-const result = solver.solve();
-
-console.log('Optimal Path:', result.path);
-console.log('Total Cost:', result.cost);
