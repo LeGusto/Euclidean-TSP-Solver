@@ -10,10 +10,9 @@ import { TSPSolverModule } from '../modules/TSP-DP';
 })
 export class CenteredBoxComponent {
   lastClickPosition = { x: 0, y: 0 };
-
   vertices: { x: number; y: number }[] = [];
-
-  edges: { target: number; cost: number }[][] = [];
+  edges: number[][] = [[]];
+  solver = new TSPSolverModule();
 
   onClick(event: MouseEvent) {
     this.lastClickPosition = {
@@ -61,5 +60,7 @@ export class CenteredBoxComponent {
         });
       }
     }
+
+    console.log('Optimal cost: ', this.solver.tsp(this.edges));
   }
 }
