@@ -44,7 +44,9 @@ export class CenteredBoxComponent {
       return;
     }
 
-    this.edges = Array.from({ length: this.vertices.length }, () => []);
+    this.edges = Array.from({ length: this.vertices.length }, () =>
+      Array(this.edges.length).fill(Infinity)
+    );
 
     const numVertices = this.vertices.length;
 
@@ -54,13 +56,10 @@ export class CenteredBoxComponent {
           this.vertices[i],
           this.vertices[j]
         );
-        this.edges[i].push({
-          target: j,
-          cost: distance,
-        });
+        this.edges[i][j] = distance;
       }
     }
 
-    console.log('Optimal cost: ', this.solver.tsp(this.edges));
+    console.log('Optimal cost: ', this.solver.calcPath(0, this.edges));
   }
 }
