@@ -72,5 +72,6 @@ export class TSPSolverModule {
     console.log('Minimum Cost: ', minCost);
     console.log('Path: ', rtPath);
     // return minCost, rtPath;
+    return minCost;
   }
 }
