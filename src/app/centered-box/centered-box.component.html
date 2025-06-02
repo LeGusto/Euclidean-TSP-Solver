@@ -5,13 +5,30 @@
       Last click position: X = {{ lastClickPosition.x }}, Y =
       {{ lastClickPosition.y }}
     </div>
+    <div *ngIf="minCost" class="cost-display">
+      Optimal Tour Cost: {{ minCost | number : "1.2-2" }}
+    </div>
   </div>
   <button class="calculate" (click)="onCalculate()">Calculate</button>
 </div>
 
+<!-- Vertices -->
 <div
   *ngFor="let vertex of vertices; let i = index"
   class="circle"
   [ngStyle]="{ left: vertex.x + 'px', top: vertex.y + 'px' }"
   (click)="removeVertex(i, $event)"
 ></div>
+
+<!-- SVG for drawing path -->
+<svg class="path-svg">
+  <line
+    *ngFor="let line of getPathLines()"
+    [attr.x1]="line.x1"
+    [attr.y1]="line.y1"
+    [attr.x2]="line.x2"
+    [attr.y2]="line.y2"
+    stroke="blue"
+    stroke-width="2"
+  />
+</svg>
