@@ -39,6 +39,11 @@ export class CenteredBoxComponent {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
+  onClear() {
+    this.vertices = [];
+    this.optimalPath = null;
+  }
+
   onCalculate() {
     if (this.vertices.length < 2) {
       alert('Please add at least two vertices.');

@@ -1,3 +1,4 @@
+<!-- Input box -->
 <div class="centered-rectangle">
   <div class="click-area" (click)="onClick($event)">
     <p>Click anywhere inside this area</p>
@@ -9,13 +10,17 @@
       Optimal Tour Cost: {{ minCost | number : "1.2-2" }}
     </div>
   </div>
-  <button class="calculate" (click)="onCalculate()">Calculate</button>
+  <div class="button-row">
+    <button class="clear" (click)="onClear()">Clear</button>
+    <button class="calculate" (click)="onCalculate()">Calculate</button>
+  </div>
 </div>
 
 <!-- Vertices -->
 <div
   *ngFor="let vertex of vertices; let i = index"
   class="circle"
+  [ngClass]="{ 'first-vertex': i === 0 }"
   [ngStyle]="{ left: vertex.x + 'px', top: vertex.y + 'px' }"
   (click)="removeVertex(i, $event)"
 ></div>
