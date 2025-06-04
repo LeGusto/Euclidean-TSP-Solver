@@ -45,6 +45,7 @@
   border-radius: 50%;
   background-color: red;
   transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .circle.first-vertex {
