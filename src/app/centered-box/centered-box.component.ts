@@ -24,6 +24,9 @@ export class CenteredBoxComponent {
   optimalPath: number[] | null = null;
   minCost: number | null = null;
   isAnimating = false;
+  previewVertex = { x: 0, y: 0 };
+  showPreviewVertex = false;
+  isCalculating = false;
 
   onClick(event: MouseEvent) {
     this.lines = [];
@@ -54,7 +57,7 @@ export class CenteredBoxComponent {
     this.optimalPath = null;
   }
 
-  onCalculate() {
+  async onCalculate() {
     if (this.vertices.length < 2) {
       alert('Please add at least two vertices.');
       return;
@@ -73,15 +76,27 @@ export class CenteredBoxComponent {
       }
     }
 
-    const result = this.solver.calcPath(0, this.edges);
-    if (result) {
-      this.minCost = result.cost;
-      this.optimalPath = result.path;
+    this.isCalculating = true;
+
+    const worker = new Worker(new URL('../solver.worker', import.meta.url));
+    worker.postMessage({ vertices: this.vertices, edges: this.edges });
+
+    worker.onmessage = ({ data }) => {
+      this.minCost = data.cost;
+      this.optimalPath = data.path;
       console.log('Optimal cost:', this.minCost);
       console.log('Optimal path:', this.optimalPath);
 
       this.calcPathLines();
-    }
+      this.isCalculating = false;
+      worker.terminate();
+    };
+
+    worker.onerror = (error) => {
+      console.error('Worker error:', error);
+      this.isCalculating = false;
+      worker.terminate();
+    };
   }
 
   calcPathLines(): void {
@@ -100,5 +115,16 @@ export class CenteredBoxComponent {
         y2: end.y,
       });
     }
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    const rect = (event.target as HTMLElement).getBoundingClientRect();
+    this.previewVertex.x = event.clientX;
+    this.previewVertex.y = event.clientY;
+    this.showPreviewVertex = true;
+  }
+
+  hidePreviewVertex(): void {
+    this.showPreviewVertex = false;
   }
 }

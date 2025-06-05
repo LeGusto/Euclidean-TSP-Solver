@@ -1,16 +1,36 @@
 <!-- Input box -->
 <div class="centered-rectangle">
-  <div class="click-area" (click)="onClick($event)">
+  <div
+    class="click-area"
+    (click)="onClick($event)"
+    (mousemove)="onMouseMove($event)"
+    (mouseleave)="hidePreviewVertex()"
+  >
     <p *ngIf="vertices.length == 0">Click anywhere inside this area</p>
+
     <!-- <div *ngIf="minCost" class="cost-display">
       Optimal Tour Cost: {{ minCost | number : "1.2-2" }}
     </div> -->
   </div>
   <div class="button-row">
-    <button class="clear" (click)="onClear()">Clear</button>
-    <button class="calculate" (click)="onCalculate()">Calculate</button>
+    <button class="clear" [disabled]="isCalculating" (click)="onClear()">
+      Clear
+    </button>
+    <button
+      class="calculate"
+      [disabled]="isCalculating"
+      (click)="onCalculate()"
+    >
+      Calculate
+    </button>
   </div>
 </div>
+
+<div
+  *ngIf="showPreviewVertex"
+  class="preview-vertex"
+  [ngStyle]="{ left: previewVertex.x + 'px', top: previewVertex.y + 'px' }"
+></div>
 
 <!-- Vertices -->
 <div
