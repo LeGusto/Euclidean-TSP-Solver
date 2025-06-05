@@ -30,7 +30,6 @@ export class CenteredBoxComponent {
 
   onClick(event: MouseEvent) {
     if (this.isCalculating) return;
-
     this.lines = [];
     this.lastClickPosition = { x: event.clientX, y: event.clientY };
     this.vertices.push({ ...this.lastClickPosition });
@@ -38,6 +37,7 @@ export class CenteredBoxComponent {
   }
 
   removeVertex(index: number, event: MouseEvent) {
+    if (this.isCalculating) return;
     this.lines = [];
     event.stopPropagation();
     this.vertices.splice(index, 1);
