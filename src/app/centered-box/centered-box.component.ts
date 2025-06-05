@@ -29,6 +29,8 @@ export class CenteredBoxComponent {
   isCalculating = false;
 
   onClick(event: MouseEvent) {
+    if (this.isCalculating) return;
+
     this.lines = [];
     this.lastClickPosition = { x: event.clientX, y: event.clientY };
     this.vertices.push({ ...this.lastClickPosition });
@@ -118,6 +120,7 @@ export class CenteredBoxComponent {
   }
 
   onMouseMove(event: MouseEvent): void {
+    if (this.isCalculating) return;
     const rect = (event.target as HTMLElement).getBoundingClientRect();
     this.previewVertex.x = event.clientX;
     this.previewVertex.y = event.clientY;

@@ -28,7 +28,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.enabled-area {
   cursor: pointer;
+}
+
+.disabled-area {
+  cursor: not-allowed;
 }
 
 .coordinates {
