@@ -14,17 +14,26 @@ export class CenteredBoxComponent {
   lastClickPosition = { x: 0, y: 0 };
   vertices: { x: number; y: number }[] = [];
   edges: number[][] = [];
+  lines: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+  }[] = [];
   solver = new TSPSolverModule();
   optimalPath: number[] | null = null;
   minCost: number | null = null;
+  isAnimating = false;
 
   onClick(event: MouseEvent) {
+    this.lines = [];
     this.lastClickPosition = { x: event.clientX, y: event.clientY };
     this.vertices.push({ ...this.lastClickPosition });
     this.optimalPath = null;
   }
 
   removeVertex(index: number, event: MouseEvent) {
+    this.lines = [];
     event.stopPropagation();
     this.vertices.splice(index, 1);
     this.optimalPath = null;
@@ -40,6 +49,7 @@ export class CenteredBoxComponent {
   }
 
   onClear() {
+    this.lines = [];
     this.vertices = [];
     this.optimalPath = null;
   }
@@ -69,20 +79,26 @@ export class CenteredBoxComponent {
       this.optimalPath = result.path;
       console.log('Optimal cost:', this.minCost);
       console.log('Optimal path:', this.optimalPath);
+
+      this.calcPathLines();
     }
   }
 
-  getPathLines(): { x1: number; y1: number; x2: number; y2: number }[] {
-    if (!this.optimalPath || this.optimalPath.length < 2) return [];
+  calcPathLines(): void {
+    this.lines = [];
+    if (!this.optimalPath || this.optimalPath.length < 2) return;
 
-    const lines = [];
     for (let i = 0; i < this.optimalPath.length - 1; i++) {
       const startIdx = this.optimalPath[i];
       const endIdx = this.optimalPath[i + 1];
       const start = this.vertices[startIdx];
       const end = this.vertices[endIdx];
-      lines.push({ x1: start.x, y1: start.y, x2: end.x, y2: end.y });
+      this.lines.push({
+        x1: start.x,
+        y1: start.y,
+        x2: end.x,
+        y2: end.y,
+      });
     }
-    return lines;
   }
 }

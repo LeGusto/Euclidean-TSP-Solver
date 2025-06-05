@@ -88,3 +88,17 @@
   margin-top: 12px;
   padding: 8px;
 }
+
+@keyframes drawPath {
+  from {
+    stroke-dasharray: 0, 100%;
+  }
+  to {
+    stroke-dasharray: 100%, 0;
+  }
+}
+
+.animate-path {
+  stroke-dasharray: 0, 100%;
+  animation: drawPath 2s ease-out forwards;
+}
