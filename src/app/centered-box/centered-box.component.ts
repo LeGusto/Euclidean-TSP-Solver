@@ -51,7 +51,7 @@ export class CenteredBoxComponent {
    */
   canPlaceVertex(): boolean {
     if (this.isCalculating) return false;
-    if (this.vertices.length > 30) return false;
+    if (this.vertices.length > 19) return false;
     return true;
   }
   /**
@@ -71,7 +71,7 @@ export class CenteredBoxComponent {
    * @param event Mouse event to stop propagation.
    */
   removeVertex(index: number, event: MouseEvent) {
-    if (!this.canPlaceVertex()) return;
+    if (this.isCalculating) return;
     this.lines = [];
     event.stopPropagation();
     this.vertices.splice(index, 1);
@@ -126,25 +126,50 @@ export class CenteredBoxComponent {
       }
     }
 
-    // Call the Flask backend
-    const apiUrl = 'http://127.0.0.1:5000/solve-tsp'; // Replace with your Flask backend URL
-    this.http
-      .post(apiUrl, { vertices: this.vertices, edges: this.edges })
-      .subscribe(
-        (result: any) => {
-          this.minCost = result.cost;
-          this.optimalPath = result.path;
-          console.log('Optimal cost:', this.minCost);
-          console.log('Optimal path:', this.optimalPath);
-
-          this.calcPathLines();
-          this.isCalculating = false;
-        },
-        (error) => {
-          console.error('Error calling Flask backend:', error);
-          this.isCalculating = false;
-        }
+    if (this.vertices.length <= 10) {
+      console.log('Using Web Worker for TSP calculation');
+      const worker = new Worker(
+        new URL('../solver.worker.ts', import.meta.url)
       );
+      worker.postMessage({ vertices: this.vertices, edges: this.edges });
+
+      worker.onmessage = ({ data }) => {
+        this.minCost = data.cost;
+        this.optimalPath = data.path;
+        console.log('Optimal cost:', this.minCost);
+        console.log('Optimal path:', this.optimalPath);
+
+        this.calcPathLines();
+        this.isCalculating = false;
+        worker.terminate();
+      };
+
+      worker.onerror = (error) => {
+        console.error('Error in web worker:', error);
+        this.isCalculating = false;
+        worker.terminate();
+      };
+    } else {
+      // Call the Flask backend
+      const apiUrl = 'http://127.0.0.1:5000/solve-tsp'; // Replace with your Flask backend URL
+      this.http
+        .post(apiUrl, { vertices: this.vertices, edges: this.edges })
+        .subscribe(
+          (result: any) => {
+            this.minCost = result.cost;
+            this.optimalPath = result.path;
+            console.log('Optimal cost:', this.minCost);
+            console.log('Optimal path:', this.optimalPath);
+
+            this.calcPathLines();
+            this.isCalculating = false;
+          },
+          (error) => {
+            console.error('Error calling Flask backend:', error);
+            this.isCalculating = false;
+          }
+        );
+    }
   }
 
   /**
