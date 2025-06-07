@@ -126,8 +126,8 @@ export class CenteredBoxComponent {
       }
     }
 
-    // Call the Lambda function via API Gateway
-    const apiUrl = '';
+    // Call the Flask backend
+    const apiUrl = 'http://127.0.0.1:5000/solve-tsp'; // Replace with your Flask backend URL
     this.http
       .post(apiUrl, { vertices: this.vertices, edges: this.edges })
       .subscribe(
@@ -141,7 +141,7 @@ export class CenteredBoxComponent {
           this.isCalculating = false;
         },
         (error) => {
-          console.error('Error calling Lambda function:', error);
+          console.error('Error calling Flask backend:', error);
           this.isCalculating = false;
         }
       );

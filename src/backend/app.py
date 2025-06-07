@@ -1,9 +1,17 @@
 from flask import Flask, request, jsonify
 import requests
+from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
-LAMBDA_URL = '';
+# Get the Lambda function URL from the .env file
+LAMBDA_URL = os.getenv("LAMBDA_URL")
 
 @app.route("/solve-tsp", methods=["POST"])
 def solve_tsp():
