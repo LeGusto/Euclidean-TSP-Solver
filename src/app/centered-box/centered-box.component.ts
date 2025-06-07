@@ -151,11 +151,11 @@ export class CenteredBoxComponent {
       };
     } else {
       // Call the Flask backend
-      const apiUrl = 'http://127.0.0.1:5000/solve-tsp'; // Replace with your Flask backend URL
+      const apiUrl = 'http://127.0.0.1:5000/solve-tsp';
       this.http
         .post(apiUrl, { vertices: this.vertices, edges: this.edges })
-        .subscribe(
-          (result: any) => {
+        .subscribe({
+          next: (result: any) => {
             this.minCost = result.cost;
             this.optimalPath = result.path;
             console.log('Optimal cost:', this.minCost);
@@ -164,11 +164,11 @@ export class CenteredBoxComponent {
             this.calcPathLines();
             this.isCalculating = false;
           },
-          (error) => {
+          error: (error) => {
             console.error('Error calling Flask backend:', error);
             this.isCalculating = false;
-          }
-        );
+          },
+        });
     }
   }
 

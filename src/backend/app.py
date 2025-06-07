@@ -10,7 +10,6 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-# Get the Lambda function URL from the .env file
 LAMBDA_URL = os.getenv("LAMBDA_URL")
 
 @app.route("/solve-tsp", methods=["POST"])
