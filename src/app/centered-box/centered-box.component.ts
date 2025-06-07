@@ -1,10 +1,11 @@
-// Update the component
+import { HttpClient } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TSPSolverModule } from '../modules/TSP-DP';
 
 @Component({
   selector: 'app-centered-box',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './centered-box.component.html',
   styleUrls: ['./centered-box.component.css'],
@@ -43,12 +44,22 @@ export class CenteredBoxComponent {
   // Flag to indicate whether a calculation is in progress
   isCalculating = false;
 
+  constructor(private http: HttpClient) {}
+
+  /**
+   *
+   */
+  canPlaceVertex(): boolean {
+    if (this.isCalculating) return false;
+    if (this.vertices.length > 30) return false;
+    return true;
+  }
   /**
    * Handles vertex placement when the user clicks on the canvas.
    * @param event Mouse event containing the click coordinates.
    */
   onClick(event: MouseEvent) {
-    if (this.isCalculating) return;
+    if (!this.canPlaceVertex()) return;
     this.lines = [];
     this.vertices.push({ x: event.clientX, y: event.clientY });
     this.optimalPath = null;
@@ -60,7 +71,7 @@ export class CenteredBoxComponent {
    * @param event Mouse event to stop propagation.
    */
   removeVertex(index: number, event: MouseEvent) {
-    if (this.isCalculating) return;
+    if (!this.canPlaceVertex()) return;
     this.lines = [];
     event.stopPropagation();
     this.vertices.splice(index, 1);
@@ -100,10 +111,11 @@ export class CenteredBoxComponent {
       return;
     }
 
-    const n = this.vertices.length;
-    this.edges = Array.from({ length: n }, () => Array(n).fill(Infinity));
+    this.isCalculating = true;
 
     // Construct the adjacency matrix
+    const n = this.vertices.length;
+    this.edges = Array.from({ length: n }, () => Array(n).fill(Infinity));
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < n; j++) {
         if (i === j) continue;
@@ -114,30 +126,25 @@ export class CenteredBoxComponent {
       }
     }
 
-    this.isCalculating = true;
+    // Call the Lambda function via API Gateway
+    const apiUrl = '';
+    this.http
+      .post(apiUrl, { vertices: this.vertices, edges: this.edges })
+      .subscribe(
+        (result: any) => {
+          this.minCost = result.cost;
+          this.optimalPath = result.path;
+          console.log('Optimal cost:', this.minCost);
+          console.log('Optimal path:', this.optimalPath);
 
-    // Offload calculation to a Web Worker
-    const worker = new Worker(new URL('../solver.worker', import.meta.url));
-    worker.postMessage({ vertices: this.vertices, edges: this.edges });
-
-    // Handle the result from the Web Worker
-    worker.onmessage = ({ data }) => {
-      this.minCost = data.cost;
-      this.optimalPath = data.path;
-      console.log('Optimal cost:', this.minCost);
-      console.log('Optimal path:', this.optimalPath);
-
-      this.calcPathLines();
-      this.isCalculating = false;
-      worker.terminate();
-    };
-
-    // Handle errors from the Web Worker
-    worker.onerror = (error) => {
-      console.error('Worker error:', error);
-      this.isCalculating = false;
-      worker.terminate();
-    };
+          this.calcPathLines();
+          this.isCalculating = false;
+        },
+        (error) => {
+          console.error('Error calling Lambda function:', error);
+          this.isCalculating = false;
+        }
+      );
   }
 
   /**
@@ -166,7 +173,7 @@ export class CenteredBoxComponent {
    * @param event Mouse event containing the cursor position.
    */
   onMouseMove(event: MouseEvent): void {
-    if (this.isCalculating) return;
+    if (!this.canPlaceVertex()) return;
     const rect = (event.target as HTMLElement).getBoundingClientRect();
     this.previewVertex.x = event.clientX;
     this.previewVertex.y = event.clientY;
