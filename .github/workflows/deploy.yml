@@ -28,4 +28,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ng deploy --base-href=/Euclidean-TSP-Solver/
-        # tes
+        # test
