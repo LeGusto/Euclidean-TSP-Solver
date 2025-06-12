@@ -8,7 +8,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["https://legusto.github.io"])
+CORS(app, origins=["https://legusto.github.io"], methods=["GET", "POST", "OPTIONS"])
 
 LAMBDA_URL = os.getenv("LAMBDA_URL")
 
