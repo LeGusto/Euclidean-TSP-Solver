@@ -1,6 +1,6 @@
 # Euclidean TSP Solver
 
-An interactive web application that solves the Euclidean Traveling Salesman Problem (TSP) using dynamic programming and AWS Lambda for scalable backend calculations. This project combines a responsive Angular frontend with a Flask backend, deployed using Docker and hosted on Render. The frontend is live on GitHub Pages.
+An interactive web application that solves the Euclidean Traveling Salesman Problem (TSP) using dynamic programming and AWS Lambda for scalable backend calculations, then displays the resulting path visually. This project combines a responsive Angular frontend with a Flask backend, deployed using Docker and hosted on Render. The frontend is live on GitHub Pages.
 
 This project solves an open-loop version of the Traveling Salesman Problem (TSP), where the goal is to find the shortest route that visits every city in a given set exactly once without returning to the starting point. Unlike the classic TSP (which forms a closed loop), this variant is ideal for scenarios like one-way delivery routes, road trips ending at a final destination, or any path optimization task where the journey terminates at the last city.
 
