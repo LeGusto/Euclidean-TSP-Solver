@@ -21,9 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm install -g @angular/cli angular-cli-ghpages --save-dev
 
-      - name: Build website
-        run: ng build --configuration production
-
+      # - name: Build website
+      #   run: ng build --configuration production
       - name: Deploy to GitHub Pages
         run: ng deploy --base-href=/Euclidean-TSP-Solver/
         # tes
