@@ -1,16 +1,29 @@
+name: Deploy Angular to GitHub Pages
+
 on:
   push:
     branches:
-      - "main" # change to the branch you wish to deploy from
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+      - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - id: build-publish
-        uses: bitovi/github-actions-angular-to-github-pages@v1.0.0
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install -g @angular/cli angular-cli-ghpages --save-dev
+
+      - name: Build website
+        run: ng build --configuration production
+
+      - name: Deploy to GitHub Pages
+        run: ng deploy --base-href=/Euclidean-TSP-Solver/
+        # tes
