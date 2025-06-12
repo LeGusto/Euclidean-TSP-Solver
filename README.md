@@ -37,6 +37,7 @@ This project solves an open-loop version of the Traveling Salesman Problem (TSP)
 ### Deployment
 - Dockerized backend hosted on Render
 - Frontend hosted on GitHub Pages
+- Github Actions for automatic deployment
 
 ## How It Works
 
