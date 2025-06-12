@@ -126,7 +126,7 @@ export class CenteredBoxComponent {
       }
     }
 
-    if (true) {
+    if (this.vertices.length <= 18) {
       // TEMPORARILY DISABLED (this.vertices.length <= 15) {
       console.log('Using Web Worker for TSP calculation');
       const worker = new Worker(
@@ -152,7 +152,7 @@ export class CenteredBoxComponent {
       };
     } else {
       // Call the Flask backend
-      const apiUrl = 'https://euclidean-tsp-solver.onrender.com/solve-tsp';
+      const apiUrl = 'https://euclidean-tsp-solver-1.onrender.com';
       this.http
         .post(apiUrl, { vertices: this.vertices, edges: this.edges })
         .subscribe({
