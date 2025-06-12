@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install dependencies
-        run: npm install -g @angular/cli angular-cli-ghpages --save-dev
+      - name: Install angular cli
+        run: npm install -g @angular/cli
+
+      - name: Install ghpages for angular cli
+        run: npm install angular-cli-ghpages --save-dev
 
       # - name: Build website
       #   run: ng build --configuration production
