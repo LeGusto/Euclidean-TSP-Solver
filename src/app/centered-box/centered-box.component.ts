@@ -152,7 +152,7 @@ export class CenteredBoxComponent {
       };
     } else {
       // Call the Flask backend
-      const apiUrl = 'https://euclidean-tsp-solver-1.onrender.com';
+      const apiUrl = 'https://euclidean-tsp-solver-1.onrender.com/solve-tsp';
       this.http
         .post(apiUrl, { vertices: this.vertices, edges: this.edges })
         .subscribe({
