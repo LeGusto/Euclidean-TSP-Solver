@@ -27,6 +27,11 @@ jobs:
       - name: Build Angular app
         run: ng build --configuration production --base-href /Euclidean-TSP-Solver/
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
       - name: Deploy to GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
