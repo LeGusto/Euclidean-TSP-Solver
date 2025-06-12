@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" data-beasties-container><head>
+export default `<!DOCTYPE html><html lang="en" data-beasties-container><head>
     <meta charset="utf-8">
     <title>EuclideanTSPSolver</title>
     <base href="/Euclidean-TSP-Solver/">
@@ -11,4 +11,4 @@
     <app-root ng-version="20.0.2" ngh="1" ng-server-context="ssg"><app-centered-box ngh="0"><div class="centered-rectangle"><div class="click-area enabled-area" jsaction="click:;"><p> Click anywhere inside this area to place vertices </p><!----><p>Click on a vertex to remove it</p><!----></div><div class="button-row"><button class="clear" jsaction="click:;"> Clear </button><button class="calculate" jsaction="click:;"> Calculate </button></div></div><!----><!----><svg class="path-svg"><!----></svg></app-centered-box><router-outlet></router-outlet><!----></app-root>
   <script src="polyfills-SCHOHYNV.js" type="module"></script><script src="main-WZNO2UFS.js" type="module"></script>
 
-<script id="ng-state" type="application/json">{"__nghData__":[{"t":{"2":"t0","3":"t1","9":"t2","10":"t3","12":"t4"},"c":{"2":[{"i":"t0","r":1}],"3":[{"i":"t1","r":1}],"9":[],"10":[],"12":[]}},{"c":{"1":[]}}]}</script></body></html>
+<script id="ng-state" type="application/json">{"__nghData__":[{"t":{"2":"t0","3":"t1","9":"t2","10":"t3","12":"t4"},"c":{"2":[{"i":"t0","r":1}],"3":[{"i":"t1","r":1}],"9":[],"10":[],"12":[]}},{"c":{"1":[]}}]}</script></body></html>`;
