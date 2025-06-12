@@ -18,14 +18,17 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install angular cli
+        run: npm install -g @angular/cli
 
-      - name: Build Angular Project
-        run: npm run build -- --output-path=dist --base-href=/Euclidean-TSP-Solver/
+      - name: Install ghpages for angular cli
+        run: npm install angular-cli-ghpages --save-dev
+
+      - name: Build Angular app
+        run: ng build --prod
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ng deploy --base-href=/Euclidean-TSP-Solver/
+        # test
