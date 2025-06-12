@@ -10,11 +10,9 @@ ENV PORT=8080
 WORKDIR /app
 
 # Copy requirements and install dependencies
-COPY requirements.txt /src/backend/requirements.txt
+COPY src/backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the backend
-COPY src/backend /app
 # Copy the backend
 COPY src/backend /app
 
