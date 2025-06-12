@@ -8,7 +8,7 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=["https://legusto.github.io"])
 
 LAMBDA_URL = os.getenv("LAMBDA_URL")
 
