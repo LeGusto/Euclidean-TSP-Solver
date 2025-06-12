@@ -4,6 +4,9 @@ An interactive web application that solves the Euclidean Traveling Salesman Prob
 
 This project solves an open-loop version of the Traveling Salesman Problem (TSP), where the goal is to find the shortest route that visits every city in a given set exactly once without returning to the starting point. Unlike the classic TSP (which forms a closed loop), this variant is ideal for scenarios like one-way delivery routes, road trips ending at a final destination, or any path optimization task where the journey terminates at the last city.
 
+![tsp-thing](https://github.com/user-attachments/assets/6b35db4b-9fc0-4ee6-9ea5-12fdbeeb7155)
+
+
 ## Features
 
 ### Interactive Vertex Placement
