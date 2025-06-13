@@ -1,23 +1,25 @@
 <!-- Input box -->
-<div class="centered-rectangle">
-  <div
-    class="click-area"
-    [ngClass]="{
-      'disabled-area': isCalculating,
-      'enabled-area': !isCalculating
-    }"
-    (click)="onClick($event)"
-    (mousemove)="onMouseMove($event)"
-    (mouseleave)="hidePreviewVertex()"
-  >
-    <p *ngIf="vertices.length == 0">
-      Click anywhere inside this area to place vertices
-    </p>
-    <p *ngIf="vertices.length == 0">Click on a vertex to remove it</p>
+<div class="centered-container">
+  <div class="centered-rectangle">
+    <div
+      class="click-area"
+      [ngClass]="{
+        'disabled-area': isCalculating,
+        'enabled-area': !isCalculating
+      }"
+      (click)="onClick($event)"
+      (mousemove)="onMouseMove($event)"
+      (mouseleave)="hidePreviewVertex()"
+    >
+      <p *ngIf="vertices.length == 0">
+        Click anywhere inside this area to place vertices
+      </p>
+      <p *ngIf="vertices.length == 0">Click on a vertex to remove it</p>
 
-    <!-- <div *ngIf="minCost" class="cost-display"> works?
+      <!-- <div *ngIf="minCost" class="cost-display"> works?
       Optimal Tour Cost: {{ minCost | number : "1.2-2" }}
     </div> -->
+    </div>
   </div>
   <div class="button-row">
     <button class="clear" [disabled]="isCalculating" (click)="onClear()">

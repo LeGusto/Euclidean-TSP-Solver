@@ -1,6 +1,19 @@
-.centered-rectangle {
+.centered-container {
   width: min(80vw, 1000px);
   height: min(80vh, 400px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.centered-rectangle {
+  width: 100%;
+  height: 100%;
   background-color: #f0f0f0;
   border: 2px solid #333;
   border-radius: 8px;
@@ -9,15 +22,16 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  /* position: absolute; */
+  /* top: 50%; */
+  /* left: 50%; */
+  /* transform: translate(-50%, -50%); */
 }
 
 .centered-rectangle p {
   font-size: 20px;
   color: #333;
+  text-align: center;
 }
 
 .click-area {
@@ -28,6 +42,20 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  /* //outline: none; Remove the focus outline */
+  /* user-select: none; Prevent text selection on click */
+}
+
+/* Remove outline for keyboard/mouse interactions
+.click-area:focus,
+.click-area:active {
+  outline: none !important;
+  box-shadow: none !important;
+} */
+
+.box:active {
+  background-color: rgba(255, 0, 255, 0.2); /* Light pink highlight */
 }
 
 .enabled-area {
@@ -125,8 +153,8 @@
 
 .preview-vertex {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: rgba(255, 0, 0, 0.5);
   transform: translate(-50%, -50%);
