@@ -55,3 +55,21 @@ This project solves an open-loop version of the Traveling Salesman Problem (TSP)
 3. **Visualization**
    - The optimal path is drawn on the canvas
    - The total cost is displayed
+
+## Tech Stack
+
+### **Frontend**
+- **Framework**: [Angular](https://angular.io/) (TypeScript)
+- **Web Workers**: Offload TSP computations (≤18 vertices) to avoid UI blocking
+- **Hosting**: [GitHub Pages](https://pages.github.com/)
+
+### **Backend**
+- **Framework**: [Flask](https://flask.palletsprojects.com/) (Python)
+- **Serverless Compute**: [AWS Lambda](https://aws.amazon.com/lambda/) (scalable TSP solver for large graphs)
+- **API**: RESTful endpoints for TSP requests
+- **Hosting**: [Render](https://render.com/) (Dockerized)
+
+### **Deployment & Infrastructure**
+- **Containerization**: [Docker](https://www.docker.com/)
+- **CI/CD**: [GitHub Actions](https://github.com/features/actions)
+
