@@ -126,7 +126,7 @@ export class CenteredBoxComponent {
       }
     }
 
-    if (this.vertices.length <= 18) {
+    if (true) {
       // TEMPORARILY DISABLED (this.vertices.length <= 15) {
       console.log('Using Web Worker for TSP calculation');
       const worker = new Worker(
