@@ -1,6 +1,6 @@
 # Euclidean TSP Solver
 
-An interactive web application that solves the Euclidean Traveling Salesman Problem (TSP) using dynamic programming and AWS Lambda for scalable backend calculations, then displays the resulting path visually. This project combines a responsive Angular frontend with a Flask backend, deployed using Docker and hosted on Render. The frontend is live on GitHub Pages.
+An interactive web application that solves the Euclidean Traveling Salesman Problem (TSP) using dynamic programming, then displays the resulting path visually.
 
 This project solves an open-loop version of the Traveling Salesman Problem (TSP), where the goal is to find the shortest route that visits every city in a given set exactly once without returning to the starting point. Unlike the classic TSP (which forms a closed loop), this variant is ideal for scenarios like one-way delivery routes, road trips ending at a final destination, or any path optimization task where the journey terminates at the last city.
 
@@ -55,3 +55,21 @@ This project solves an open-loop version of the Traveling Salesman Problem (TSP)
 3. **Visualization**
    - The optimal path is drawn on the canvas
    - The total cost is displayed
+
+## Tech Stack
+
+### **Frontend**
+- **Framework**: [Angular](https://angular.io/) (TypeScript)
+- **Web Workers**: Offload TSP computations (≤18 vertices) to avoid UI blocking
+- **Hosting**: [GitHub Pages](https://pages.github.com/)
+
+### **Backend**
+- **Framework**: [Flask](https://flask.palletsprojects.com/) (Python)
+- **Serverless Compute**: [AWS Lambda](https://aws.amazon.com/lambda/) (scalable TSP solver for large graphs)
+- **API**: RESTful endpoints for TSP requests
+- **Hosting**: [Render](https://render.com/) (Dockerized)
+
+### **Deployment & Infrastructure**
+- **Containerization**: [Docker](https://www.docker.com/)
+- **CI/CD**: [GitHub Actions](https://github.com/features/actions)
+
